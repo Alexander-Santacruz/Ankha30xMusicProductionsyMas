@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankha30x Oficial</title>
+
+    <!-- Importación de la fuente Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: 'Orbitron', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        img, video,juegos{
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+
+        /* Panel de botones */
+        .panel {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .panel button {
+            padding: 15px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+
+        .btn-imagenes {
+            background-color: #eeff00;
+            color: white;
+        }
+
+        .btn-videos {
+            background-color: #007bff;
+            color: white;
+        }
+   .btn-juegos{
+            background-color: #ff0000;
+            color: rgb(255, 255, 255);
+
+}
+        .panel button:hover {
+            opacity: 0.8;
+        }
+        
+
+        /* Estilo de enlaces */
+        a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #ff6600;
+            text-decoration: underline;
+        }
+
+        h1, h2, p {
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #444;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+    
+    <link rel="stylesheet" href="ankha30x.css">
+</head>
+<body>
+    <div id="particles-js"></div> <!-- Fondo animado -->
+
+    <div class="clock-container">
+        <div id="clock">00:00:00 AM</div>
+        <div id="day">Día</div>
+        <div id="phrase">✨ Presiona el botón para motivarte</div>
+        <button id="changePhrase"><h1 style="color:#CB4335">Ankha30x Oficial Web</h1></button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="ankha30x.js"></script>
+    <br/>
+    <br/>
+    <br/>
+    
+    
+    <p>Bienvenido a Ankha30x Oficial, donde nos dedicamos a crear música independiente y a mejorar constantemente para ofrecerte una gran experiencia. Comenzamos en 2017 y seguimos evolucionando hasta el 2025.</p>
+    <br/>
+    <br/>
+    <br/>
+    
+
+    <h2 style="color:#CB4335">🔥 Presiona La Imagen Para Visitar Mi Canal 🔥</h2>
+    <a href="https://youtube.com/@ankha30xoficial?feature=shared" target="_blank" title="Visitar canal">
+        <img src="Ankha30x Oficial.jpeg" alt="Ankha30x Oficial">
+    </a>
+
+    <!-- Panel de botones -->
+    <div class="panel">
+        <button class="btn-imagenes" onclick="toggleContent('imagenes')">🔥 Ankha30x Imágenes 🔥</button>
+        <button class="btn-videos" onclick="toggleContent('videos')">®️ Ankha30x Vídeos ®️</button>
+        <button class="juegos" onclick="toggleContent('juegos')">Juegos</button>
+    </div>
+
+    <!-- Contenedor de imágenes -->
+    <div id="imagenes" class="content">
+        <h2 style="color:#CB4335">Disfruta de imágenes de Ankha30x Project</h2>
+            <br/>
+    <br/>
+    <br/>
+    
+        <h3 style="color:#4A235A">Ichika30x: mi secreto nocturno</h3>    <br/>
+    <br/>
+    
+        <img src="DulcePecado (11).jpeg" alt="Imagen 1">
+          <br/>
+    <br/>
+    
+        <h3 style="color:#4A235A">Caída sin fin es mi dulce liberación 😭</h3>    <br/>
+    <br/>
+  
+        <img src="kitty30x.jpeg" alt="Imagen 2">
+            <br/>
+    <br/>
+    <br/>
+    <h3 style="color:#4A235A">"Jugar Juegos Es Mi Pasión"</h3>    <br/>
+    
+        <img src="Ichika30x Gamer.png" alt="Imagen 3">
+        <br/>
+    <br/>
+    <h3 style="color:#4A235A">"Ana30x en diferentes poses 😎"</h3>    <br/>
+    
+        <img src="Ana30x .jpg" alt="Imagen 4">
+            <br/>
+    <br/>
+    <h3 style="color:#4A235A">"Jugar Juegos Es Mi Pasión"</h3>    <br/>
+    
+        <img src="Ichika30x Gamer.png" alt="Imagen 5">
+    <br/>
+    <br/>
+    <h3 style="color:#4A235A">"La original siempre sera autentica "</h3>    <br/>
+    
+        <img src="Ankha30x original.jpg" alt="Imagen 6">
+        <br/>
+    <br/>
+    <h3 style="color:#4A235A">"En este mundo existen machos pero esta variante no recibio todo su credito"</h3>    <br/>
+    
+        <img src="Variante masculina.jpg" alt="Imagen 3">
+    
+    
+    
+    </div>
+
+    <!-- Contenedor de vídeos -->
+    <div id="videos" class="content">
+        <h2 style="color:#CB4335">Videos oficiales o material no publicado 👀</h2>
+        <h3 style="color:#4A235A">Esto pasa cuando un video H se une a una cancion mia 😈</h3>
+        <video controls>
+            <source src="hentai.mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video>
+        <br/>
+    <br/>
+    <br/>
+    
+        <h3 style="color:#4A235A">Solo una debe caer y no sere yo</h3>
+        <video controls>
+            <source src="Ankha30x-Killer Love.mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video  
+        <br/>
+    <br/>
+    <br/>
+    
+        <h3 style="color:#4A235A">Simplemente Dime Ankha30x Oficial</h3>
+        <video controls>
+            <source src="Ankha30x Oficial-Remix.mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video>
+            <br/>
+    <br/>
+    <br/>
+    
+    <h3 style="color:#4A235A">Ichika30x Oculta un secreto muy profundo en su corazon felino 💔</h3>
+        <video controls>
+            <source src="Anka30x-Double Life.mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video>
+        <br/>
+    <br/>
+    <br/>
+    <h3 style="color:#4A235A">El amor virtual no es real? yo soy real (esta es una version corta de una de mis canciones mas escuchadas)</h3>
+        <video controls>
+            <source src="Anka30x-Love Virtual X (Lirycs version).mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video>
+        <br/>
+    <br/>
+    <br/>
+    <h3 style="color:#4A235A">Kitty30x: "Caida Libre Sin Fin Mi Dulce Liberacion"</h3>
+        <video controls>
+            <source src="Ankha30x-Kitty30x Suickde letter card.mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video>
+        <br/>
+    <br/>
+    <br/>
+    <h3 style="color:#4A235A">"Dios jamas querra saber de nosotros" Atte: ®️®️</h3>
+        <video controls>
+            <source src="Ankha30x-Cancion Prohibida por dios.mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video>
+        <br/>
+    <br/>
+    <br/>
+    <h3 style="color:#4A235A">Eres acusad@ injustamente de algo que no cometistes y te corrompes y tiras verdades fuertes </h3>
+        <video controls>
+            <source src="Ankha30x-Corrupted mind.mp4" type="video/mp4">
+            Tu navegador no soporta el formato de vídeo.
+        </video>
+    
+    
+    
+    </div>
+     <!-- Contenedor de Juegos -->
+      <div id="juegos" class="content">
+        <h2 style="color: #CB4335;">Proximamente Se programaran Juegos</h2>
+      </div>
+
+    <script>
+        function toggleContent(type) {
+            let content = document.getElementById(type);
+            let allContents = document.querySelectorAll(".content");
+
+            // Si la sección ya está visible, ocúltala
+            if (content.classList.contains("visible")) {
+                content.classList.remove("visible");
+            } else {
+                // Oculta todas las secciones
+                allContents.forEach((section) => section.classList.remove("visible"));
+                // Muestra la sección seleccionada
+                content.classList.add("visible");
+            }
+        }
+    </script>
+
+</body>
+</html>

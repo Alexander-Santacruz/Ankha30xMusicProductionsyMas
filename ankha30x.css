@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+    transition: background 0.5s, color 0.5s;
+}
+
+/* Fondo de partículas */
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: -2;
+}
+
+/* Contenedor del reloj - Ahora centrado sin interferir con otros elementos */
+.clock-container {
+    position: relative;
+    margin-top: 50px;
+    text-align: center;
+    z-index: 1;
+}
+
+/* Texto del reloj con efecto LED */
+#clock {
+    font-size: 80px;
+    font-weight: bold;
+    text-shadow: 0px 0px 20px white;
+    transition: color 0.5s, text-shadow 0.5s;
+}
+
+/* Día de la semana */
+#day {
+    font-size: 35px;
+    margin-top: 10px;
+    transition: color 0.5s, text-shadow 0.5s;
+}
+
+/* Frases motivacionales */
+#phrase {
+    font-size: 25px;
+    margin-top: 15px;
+    font-style: italic;
+    transition: color 0.5s, text-shadow 0.5s;
+}
+
+/* Botón para cambiar frases */
+#changePhrase {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 22px;
+    font-family: 'Orbitron', sans-serif;
+    border: none;
+    cursor: pointer;
+    background: white;
+    color: black;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+#changePhrase:hover {
+    background: gray;
+}
+
+/* Responsivo para pantallas más pequeñas */
+@media (max-width: 768px) {
+    #clock {
+        font-size: 50px;
+    }
+
+    #day {
+        font-size: 25px;
+    }
+
+    #phrase {
+        font-size: 18px;
+    }
+
+    #changePhrase {
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+}
