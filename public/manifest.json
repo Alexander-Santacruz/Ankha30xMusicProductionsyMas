@@ -1,0 +1,21 @@
+{
+    "name": "Ankha30x Oficial",
+    "short_name": "Ankha30x",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#07111f",
+    "theme_color": "#0d1321",
+    "description": "Version web y movil de Ankha30x Oficial.",
+    "icons": [
+        {
+            "src": "/assets/images/Ankha30x Oficial.jpeg",
+            "sizes": "192x192",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "/assets/images/Ankha30x Oficial.jpeg",
+            "sizes": "512x512",
+            "type": "image/jpeg"
+        }
+    ]
+}
