@@ -32,6 +32,7 @@ function getBogotaTime() {
 }
 
 export default function HomePage() {
+    const baseUrl = import.meta.env.BASE_URL;
     const [clock, setClock] = useState(() => getBogotaTime().time);
     const [day, setDay] = useState(() => getBogotaTime().day);
     const [phrase, setPhrase] = useState(phrases[0]);
@@ -48,7 +49,7 @@ export default function HomePage() {
         }, 1000);
 
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/service-worker.js").catch(() => {
+            navigator.serviceWorker.register(`${baseUrl}service-worker.js`).catch(() => {
                 // Si falla el registro, la app sigue funcionando.
             });
         }
@@ -130,7 +131,7 @@ export default function HomePage() {
                         </div>
 
                         <div className="hero-card">
-                            <img src="/assets/images/Ankha30x Oficial.jpeg" alt="Portada oficial de Ankha30x" />
+                            <img src={`${baseUrl}assets/images/Ankha30x Oficial.jpeg`} alt="Portada oficial de Ankha30x" />
                             <div className="hero-card-body">
                                 <p className="card-kicker">Identidad oficial</p>
                                 <h2>Ankha30x Oficial, sus personajes y su estetica ahora tienen un hogar mas fuerte.</h2>

@@ -1,3 +1,6 @@
+const baseUrl = import.meta.env.BASE_URL;
+const asset = (path) => `${baseUrl}${path}`;
+
 export const sections = [
     { id: "inicio", label: "Inicio" },
     { id: "musica", label: "Musica" },
@@ -16,32 +19,32 @@ export const phrases = [
 
 export const galleryItems = [
     {
-        src: "/assets/images/DulcePecado (11).jpeg",
+        src: asset("assets/images/DulcePecado (11).jpeg"),
         alt: "Ichika30x dentro del universo Ankha30x Oficial",
         caption: "Ichika30x y su lado mas intimo dentro del universo Ankha30x Oficial"
     },
     {
-        src: "/assets/images/kitty30x.jpeg",
+        src: asset("assets/images/kitty30x.jpeg"),
         alt: "Kitty30x en una faceta emocional profunda",
         caption: "Kitty30x cargando una emocion oscura y profunda que define parte del proyecto"
     },
     {
-        src: "/assets/images/Ichika30x Gamer.png",
+        src: asset("assets/images/Ichika30x Gamer.png"),
         alt: "Ichika30x Gamer",
         caption: "Ichika30x Gamer mostrando una faceta mas divertida de Ankha30x Oficial"
     },
     {
-        src: "/assets/images/Ana30x .jpg",
+        src: asset("assets/images/Ana30x .jpg"),
         alt: "Ana30x en distintas poses",
         caption: "Ana30x en diferentes poses como parte del estilo visual del proyecto"
     },
     {
-        src: "/assets/images/Ankha30x original.jpg",
+        src: asset("assets/images/Ankha30x original.jpg"),
         alt: "Version original de Ankha30x Oficial",
         caption: "La version original de Ankha30x Oficial, la raiz de toda esta identidad"
     },
     {
-        src: "/assets/images/Variante masculina.jpg",
+        src: asset("assets/images/Variante masculina.jpg"),
         alt: "Variante masculina del universo Ankha30x",
         caption: "Una variante masculina que tambien forma parte del imaginario de Ankha30x Oficial"
     }
@@ -50,19 +53,19 @@ export const galleryItems = [
 export const videoItems = [
     {
         title: "Killer Love: una de las caras mas intensas de Ankha30x Oficial",
-        src: "/assets/videos/Ankha30x-Killer Love.mp4"
+        src: asset("assets/videos/Ankha30x-Killer Love.mp4")
     },
     {
         title: "Oficial Remix: identidad directa y energia propia",
-        src: "/assets/videos/Ankha30x Oficial-Remix.mp4"
+        src: asset("assets/videos/Ankha30x Oficial-Remix.mp4")
     },
     {
         title: "Double Life: una historia marcada por dualidad y secretos",
-        src: "/assets/videos/Anka30x-Double Life.mp4"
+        src: asset("assets/videos/Anka30x-Double Life.mp4")
     },
     {
         title: "Love Virtual X: sentimiento digital dentro del sonido Ankha30x",
-        src: "/assets/videos/Anka30x-Love Virtual X (Lirycs version).mp4"
+        src: asset("assets/videos/Anka30x-Love Virtual X (Lirycs version).mp4")
     }
 ];
 
