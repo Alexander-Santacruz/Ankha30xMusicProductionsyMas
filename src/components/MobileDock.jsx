@@ -10,7 +10,7 @@ export default function MobileDock({ activeSection, onNavigate }) {
                     type="button"
                     onClick={() => onNavigate(section.id)}
                 >
-                    {section.label}
+                    <span>{section.label}</span>
                 </button>
             ))}
         </nav>

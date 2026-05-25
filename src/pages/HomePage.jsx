@@ -1,179 +1,247 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import MobileDock from "../components/MobileDock.jsx";
 import SectionHeading from "../components/SectionHeading.jsx";
 import TopBar from "../components/TopBar.jsx";
+import VrmViewerCard from "../components/VrmViewerCard.jsx";
 import {
-    featureItems,
     galleryItems,
     phrases,
+    rightsNotice,
     sections,
-    videoItems
+    videoItems,
+    vrmItems
 } from "../data/siteContent.js";
 
 function getBogotaTime() {
     const now = new Date();
-    const time = new Intl.DateTimeFormat("es-CO", {
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-        timeZone: "America/Bogota"
-    }).format(now);
-
-    const weekday = new Intl.DateTimeFormat("es-CO", {
-        weekday: "long",
-        timeZone: "America/Bogota"
-    }).format(now);
 
     return {
-        time,
-        day: weekday.charAt(0).toUpperCase() + weekday.slice(1)
+        time: new Intl.DateTimeFormat("es-CO", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true,
+            timeZone: "America/Bogota"
+        }).format(now),
+        day: new Intl.DateTimeFormat("es-CO", {
+            weekday: "long",
+            timeZone: "America/Bogota"
+        }).format(now),
+        date: new Intl.DateTimeFormat("es-CO", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            timeZone: "America/Bogota"
+        }).format(now)
+    };
+}
+
+function getHashState(models) {
+    const hash = window.location.hash.replace("#", "");
+
+    if (hash.startsWith("modelo-")) {
+        const modelId = hash.replace("modelo-", "");
+
+        if (models.some((item) => item.id === modelId)) {
+            return {
+                section: "modelos-vrm",
+                selectedModelId: modelId
+            };
+        }
+    }
+
+    return {
+        section: sections.some((section) => section.id === hash) ? hash : "inicio",
+        selectedModelId: null
     };
 }
 
 export default function HomePage() {
     const baseUrl = import.meta.env.BASE_URL;
-    const [clock, setClock] = useState(() => getBogotaTime().time);
-    const [day, setDay] = useState(() => getBogotaTime().day);
-    const [phrase, setPhrase] = useState(phrases[0]);
-    const [activeSection, setActiveSection] = useState(() => {
-        const hash = window.location.hash.replace("#", "");
-        return sections.some((section) => section.id === hash) ? hash : "inicio";
-    });
+    const [clockData, setClockData] = useState(() => getBogotaTime());
+    const [phrase] = useState(phrases[0]);
+    const [featuredVideoIndex, setFeaturedVideoIndex] = useState(0);
+    const [uploadedVrms, setUploadedVrms] = useState(vrmItems);
+    const uploadedVrmsRef = useRef(vrmItems);
+    const initialHashState = getHashState(vrmItems);
+    const [activeSection, setActiveSection] = useState(initialHashState.section);
+    const [selectedVrmId, setSelectedVrmId] = useState(initialHashState.selectedModelId);
 
     useEffect(() => {
         const timer = window.setInterval(() => {
-            const next = getBogotaTime();
-            setClock(next.time);
-            setDay(next.day);
+            setClockData(getBogotaTime());
         }, 1000);
 
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register(`${baseUrl}service-worker.js`).catch(() => {
-                // Si falla el registro, la app sigue funcionando.
-            });
+            navigator.serviceWorker.register(`${baseUrl}service-worker.js`).catch(() => {});
         }
 
         return () => window.clearInterval(timer);
-    }, []);
+    }, [baseUrl]);
 
     useEffect(() => {
         const handleHashChange = () => {
-            const hash = window.location.hash.replace("#", "");
-            if (sections.some((section) => section.id === hash)) {
-                setActiveSection(hash);
-            }
+            const nextHashState = getHashState(uploadedVrmsRef.current);
+            setActiveSection(nextHashState.section);
+            setSelectedVrmId(nextHashState.selectedModelId);
         };
 
         window.addEventListener("hashchange", handleHashChange);
         return () => window.removeEventListener("hashchange", handleHashChange);
     }, []);
 
-    function showRandomPhrase() {
-        const randomIndex = Math.floor(Math.random() * phrases.length);
-        setPhrase(phrases[randomIndex]);
-    }
+    useEffect(() => {
+        const videoTimer = window.setInterval(() => {
+            setFeaturedVideoIndex((current) => (current + 1) % videoItems.length);
+        }, 9000);
+
+        return () => window.clearInterval(videoTimer);
+    }, []);
+
+    useEffect(() => {
+        uploadedVrmsRef.current = uploadedVrms;
+    }, [uploadedVrms]);
+
+    useEffect(() => {
+        return () => {
+            uploadedVrmsRef.current.forEach((item) => {
+                if (item.isTemporary) {
+                    URL.revokeObjectURL(item.url);
+                }
+            });
+        };
+    }, []);
+
+    const featuredVisual = useMemo(
+        () => ({
+            src: `${baseUrl}assets/images/Ankha30x Oficial.jpeg`,
+            alt: "Portada oficial de Ankha30x",
+            caption: "Ankha30x Oficial como imagen principal del inicio"
+        }),
+        [baseUrl]
+    );
+    const featuredVideo = videoItems[featuredVideoIndex];
+    const selectedVrm = uploadedVrms.find((item) => item.id === selectedVrmId) ?? null;
 
     function handleNavigate(sectionId) {
         setActiveSection(sectionId);
+        setSelectedVrmId(null);
         window.history.replaceState(null, "", `#${sectionId}`);
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function handleOpenModel(modelId) {
+        setActiveSection("modelos-vrm");
+        setSelectedVrmId(modelId);
+        window.history.replaceState(null, "", `#modelo-${modelId}`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function handleVrmUpload(event) {
+        const files = Array.from(event.target.files ?? []);
+        const nextModels = files.map((file, index) => ({
+            id: `${file.name}-${file.lastModified}-${index}`,
+            name: file.name.replace(/\.vrm$/i, ""),
+            filename: file.name,
+            size: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
+            url: URL.createObjectURL(file),
+            isTemporary: true
+        }));
+
+        setUploadedVrms((current) => [...nextModels, ...current]);
+        event.target.value = "";
+    }
+
+    function preventMediaSave(event) {
+        event.preventDefault();
+    }
+
     return (
         <div className="app-shell">
-            <div className="particle-layer" aria-hidden="true">
-                <span className="particle particle-a"></span>
-                <span className="particle particle-b"></span>
-                <span className="particle particle-c"></span>
-                <span className="particle particle-d"></span>
-            </div>
+            <div className="ambient-grid" aria-hidden="true" />
 
             <TopBar activeSection={activeSection} onNavigate={handleNavigate} />
 
-            <main className="container">
+            <main className="page-shell">
                 {activeSection === "inicio" && (
-                    <section className="hero" id="inicio">
+                    <section className="hero-panel" id="inicio">
                         <div className="hero-copy">
-                            <p className="eyebrow">Ankha30x Oficial desde 2017</p>
-                            <h1>La casa digital de Ankha30x Oficial en version web y movil.</h1>
+                            <p className="eyebrow">Ankha30x Oficial</p>
+                            <h1>Una experiencia visual poderosa para entrar al universo Ankha30x.</h1>
                             <p className="hero-text">
-                                Este espacio reune la musica, los videos, las imagenes y la identidad de Ankha30x Oficial
-                                en una experiencia mas seria, mas ordenada y lista para seguir creciendo en computadora y celular.
+                                Una pagina hecha con amor para el futuro de este proyecto de Ankha30x.
                             </p>
 
-                            <div className="hero-actions">
-                                <a
-                                    className="button button-primary"
-                                    href="https://youtube.com/@ankha30xoficial?feature=shared"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    Ver canal oficial
-                                </a>
-                                <button className="button button-secondary" type="button" onClick={showRandomPhrase}>
-                                    Cambiar frase
-                                </button>
+                            <div className="hero-clock-card">
+                                <span className="status-label">Hora</span>
+                                <strong className="clock">{clockData.time}</strong>
+                                <span className="status-subtext">{clockData.date}</span>
+                                <span className="status-day">
+                                    {clockData.day.charAt(0).toUpperCase() + clockData.day.slice(1)}
+                                </span>
                             </div>
 
-                            <div className="status-grid">
-                                <article className="status-card">
-                                    <span className="status-label">Hora local</span>
-                                    <strong className="clock">{clock}</strong>
-                                    <span className="status-subtext">{day}</span>
-                                </article>
-                                <article className="status-card">
-                                    <span className="status-label">Estado</span>
-                                    <strong>Universo Ankha30x activo</strong>
-                                    <span className="status-subtext">{phrase}</span>
-                                </article>
+                            <div className="hero-status-card">
+                                <span className="status-label">Estado</span>
+                                <strong>Universo Ankha30x activo</strong>
+                                <p>{phrase}</p>
                             </div>
                         </div>
 
-                        <div className="hero-card">
-                            <img src={`${baseUrl}assets/images/Ankha30x Oficial.jpeg`} alt="Portada oficial de Ankha30x" />
-                            <div className="hero-card-body">
-                                <p className="card-kicker">Identidad oficial</p>
-                                <h2>Ankha30x Oficial, sus personajes y su estetica ahora tienen un hogar mas fuerte.</h2>
-                                <p>
-                                    La portada principal ya no solo muestra contenido: ahora presenta el proyecto como
-                                    una marca creativa con personalidad propia.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                )}
+                        <div className="hero-showcase">
+                            <article className="showcase-card visual-card">
+                                <div className="showcase-media protect-media" onContextMenu={preventMediaSave}>
+                                    <img src={featuredVisual.src} alt={featuredVisual.alt} draggable="false" />
+                                    <div className="media-guard">
+                                        <span>{rightsNotice}</span>
+                                    </div>
+                                </div>
+                                <div className="showcase-body">
+                                    <span className="card-tag">Imagen destacada</span>
+                                    <h2>{featuredVisual.caption}</h2>
+                                </div>
+                            </article>
 
-                {activeSection === "musica" && (
-                    <section className="section content-section" id="musica">
-                        <SectionHeading
-                            eyebrow="Musica y concepto"
-                            title="Una app web hecha para presentar mejor la esencia de Ankha30x Oficial."
-                            text="Ankha30x Oficial mezcla musica independiente, energia emocional, personajes propios y una imagen que no busca parecerse a nadie. Esta version en React conserva esa identidad y la adapta a una interfaz lista para escritorio y movil."
-                        />
-
-                        <div className="feature-grid">
-                            {featureItems.map((item) => (
-                                <article className="feature-card" key={item.title}>
-                                    <h3>{item.title}</h3>
-                                    <p>{item.text}</p>
-                                </article>
-                            ))}
+                            <article className="showcase-card video-highlight-card">
+                                <div className="showcase-media protect-media" onContextMenu={preventMediaSave}>
+                                    <video
+                                        controls
+                                        controlsList="nodownload noplaybackrate"
+                                        disablePictureInPicture
+                                        preload="metadata"
+                                    >
+                                        <source src={featuredVideo.src} type="video/mp4" />
+                                    </video>
+                                    <div className="media-guard">
+                                        <span>{rightsNotice}</span>
+                                    </div>
+                                </div>
+                                <div className="showcase-body">
+                                    <span className="card-tag">Video destacado</span>
+                                    <h2>{featuredVideo.title}</h2>
+                                </div>
+                            </article>
                         </div>
                     </section>
                 )}
 
                 {activeSection === "galeria" && (
-                    <section className="section content-section" id="galeria">
+                    <section className="content-panel" id="galeria">
                         <SectionHeading
-                            eyebrow="Galeria visual"
-                            title="Personajes, variantes y momentos clave de Ankha30x Oficial."
+                            eyebrow="Imagenes"
+                            title="Galeria visual Ankha30x"
                         />
 
-                        <div className="gallery-grid">
-                            {galleryItems.map((item) => (
-                                <figure className="media-card" key={item.src}>
-                                    <img src={item.src} alt={item.alt} />
+                        <div className="media-grid gallery-grid">
+                            {galleryItems.map((item, index) => (
+                                <figure className="media-tile" key={item.src}>
+                                    <div className="media-frame protect-media" onContextMenu={preventMediaSave}>
+                                        <img src={item.src} alt={item.alt} draggable="false" />
+                                        <div className="media-guard">
+                                            <span>{rightsNotice}</span>
+                                        </div>
+                                        <span className="media-counter">Imagen {index + 1}</span>
+                                    </div>
                                     <figcaption>{item.caption}</figcaption>
                                 </figure>
                             ))}
@@ -182,29 +250,81 @@ export default function HomePage() {
                 )}
 
                 {activeSection === "videos" && (
-                    <section className="section content-section" id="videos">
+                    <section className="content-panel" id="videos">
                         <SectionHeading
-                            eyebrow="Videos destacados"
-                            title="Clips, remixes y piezas que expanden el mundo musical de Ankha30x Oficial."
+                            eyebrow="Videos"
+                            title="Videoteca Ankha30x"
                         />
 
-                        <div className="video-grid">
-                            {videoItems.map((item) => (
-                                <article className="video-card" key={item.src}>
-                                    <h3>{item.title}</h3>
-                                    <video controls preload="metadata">
-                                        <source src={item.src} type="video/mp4" />
-                                    </video>
+                        <div className="media-grid video-grid">
+                            {videoItems.map((item, index) => (
+                                <article className="video-tile" key={item.src}>
+                                    <div className="media-frame protect-media" onContextMenu={preventMediaSave}>
+                                        <video
+                                            controls
+                                            controlsList="nodownload noplaybackrate"
+                                            disablePictureInPicture
+                                            preload="metadata"
+                                        >
+                                            <source src={item.src} type="video/mp4" />
+                                        </video>
+                                        <div className="media-guard">
+                                            <span>{rightsNotice}</span>
+                                        </div>
+                                        <span className="media-counter">Video {index + 1}</span>
+                                    </div>
+                                    <div className="video-tile-body">
+                                        <h3>{item.title}</h3>
+                                    </div>
                                 </article>
                             ))}
                         </div>
                     </section>
                 )}
-            </main>
 
-            <footer className="footer container">
-                <p>Ankha30x Oficial. Musica, identidad visual y expansion digital en una sola plataforma.</p>
-            </footer>
+                {activeSection === "modelos-vrm" && selectedVrm && (
+                    <section className="content-panel model-focus-page" id="modelos-vrm">
+                        <div className="model-focus-topbar">
+                            <button className="model-back-button" type="button" onClick={() => handleNavigate("modelos-vrm")}>
+                                Volver a modelos
+                            </button>
+                        </div>
+
+                        <VrmViewerCard
+                            index={Math.max(0, uploadedVrms.findIndex((item) => item.id === selectedVrm.id))}
+                            model={selectedVrm}
+                            fullScreen
+                        />
+                    </section>
+                )}
+
+                {activeSection === "modelos-vrm" && !selectedVrm && (
+                    <section className="content-panel" id="modelos-vrm">
+                        <SectionHeading
+                            eyebrow="Modelos VRM Ankha30x"
+                            title="Modelos Oficiales Ankha30x"
+                        />
+
+                        {uploadedVrms.length > 0 ? (
+                            <div className="vrm-grid">
+                                {uploadedVrms.map((item, index) => (
+                                    <VrmViewerCard
+                                        key={item.id ?? `${item.filename}-${index}`}
+                                        index={index}
+                                        model={item}
+                                        onOpen={handleOpenModel}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="empty-state">
+                                <strong>No hay modelos cargados</strong>
+                                <p>Agrega tus archivos VRM para verlos aqui.</p>
+                            </div>
+                        )}
+                    </section>
+                )}
+            </main>
 
             <MobileDock activeSection={activeSection} onNavigate={handleNavigate} />
         </div>

@@ -1,9 +1,10 @@
-const CACHE_NAME = "ankha30x-v2";
+const CACHE_NAME = "ankha30x-v3";
+const BASE_PATH = "/Ankha30xMusicProductionsyMas";
 const APP_ASSETS = [
-    "/",
-    "/index.html",
-    "/manifest.json",
-    "/assets/images/Ankha30x Oficial.jpeg"
+    `${BASE_PATH}/`,
+    `${BASE_PATH}/index.html`,
+    `${BASE_PATH}/manifest.json`,
+    `${BASE_PATH}/assets/images/Ankha30x Oficial.jpeg`
 ];
 
 self.addEventListener("install", (event) => {
